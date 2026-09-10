@@ -217,37 +217,29 @@
 
 </div>
 
-<!-- Include jQuery and DataTables -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script>
-    // Initialize DataTables
-    $(document).ready(function () {
-        $('#usersTable').DataTable({
-            // Optional: Customize DataTables settings here
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        var exportBtn = document.getElementById('exportCsvBtn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function() {
+                var csv = [];
+                var rows = document.querySelectorAll("#usersTable tr");
 
-        // Export table data as CSV
-        $('#exportCsvBtn').click(function() {
-            var csv = [];
-            var rows = document.querySelectorAll("#usersTable tr");
-
-            for (var i = 0; i < rows.length; i++) {
-                var row = [], cols = rows[i].querySelectorAll("td, th");
-                for (var j = 0; j < cols.length; j++) {
-                    row.push(cols[j].innerText);
+                for (var i = 0; i < rows.length; i++) {
+                    var row = [], cols = rows[i].querySelectorAll("td, th");
+                    for (var j = 0; j < cols.length; j++) {
+                        var text = cols[j].innerText.trim().replace(/"/g, '""');
+                        row.push('"' + text + '"');
+                    }
+                    csv.push(row.join(","));
                 }
-                csv.push(row.join(","));
-            }
 
-            var csvFile = new Blob([csv.join("\n")], { type: 'text/csv' });
-            var downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(csvFile);
-            downloadLink.download = "users_list.csv";
-            downloadLink.click();
-        });
+                var csvFile = new Blob([csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
+                var downloadLink = document.createElement("a");
+                downloadLink.href = URL.createObjectURL(csvFile);
+                downloadLink.download = "users_list.csv";
+                downloadLink.click();
+            });
+        }
     });
 </script>
