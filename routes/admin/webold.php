@@ -34,6 +34,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/admin/user/add-second-account', [ManageUsersController::class, 'addSecondAccount'])
     ->name('admin.user.addSecondAccount');
+Route::post('/admin/user/add-third-account', [ManageUsersController::class, 'addThirdAccount'])
+    ->name('admin.user.addThirdAccount');
+Route::post('/admin/user/add-fourth-account', [ManageUsersController::class, 'addFourthAccount'])
+    ->name('admin.user.addFourthAccount');
 Route::post('/admin/user/add-second-accountdep', [ManageDepositController::class, 'adddeposit'])
     ->name('admin.user.addSecondAccountdep');
 

@@ -154,11 +154,23 @@
                         <a data-toggle="collapse" href="#thirdacct">
                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                             <p>3rd Account Requests
+                                @if (!empty($pendingThirdCount) && $pendingThirdCount > 0)
+                                    <span class="badge badge-danger ml-1">{{ $pendingThirdCount }}</span>
+                                @endif
                                 <span class="caret"></span>
                             </p>
                         </a>
                         <div class="collapse {{ request()->routeIs('admin.third.*') ? 'show' : '' }}" id="thirdacct">
                             <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="{{ route('admin.third.requests') }}">
+                                        <span class="sub-item">Requests
+                                            @if (!empty($pendingThirdCount) && $pendingThirdCount > 0)
+                                                <span class="badge badge-danger ml-1">{{ $pendingThirdCount }}</span>
+                                            @endif
+                                        </span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{{ route('admin.third.list') }}">
                                         <span class="sub-item">All 3rd Accounts</span>
@@ -178,11 +190,23 @@
                         <a data-toggle="collapse" href="#fourthacct">
                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                             <p>4th Account Requests
+                                @if (!empty($pendingFourthCount) && $pendingFourthCount > 0)
+                                    <span class="badge badge-danger ml-1">{{ $pendingFourthCount }}</span>
+                                @endif
                                 <span class="caret"></span>
                             </p>
                         </a>
                         <div class="collapse {{ request()->routeIs('admin.fourth.*') ? 'show' : '' }}" id="fourthacct">
                             <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="{{ route('admin.fourth.requests') }}">
+                                        <span class="sub-item">Requests
+                                            @if (!empty($pendingFourthCount) && $pendingFourthCount > 0)
+                                                <span class="badge badge-danger ml-1">{{ $pendingFourthCount }}</span>
+                                            @endif
+                                        </span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{{ route('admin.fourth.list') }}">
                                         <span class="sub-item">All 4th Accounts</span>

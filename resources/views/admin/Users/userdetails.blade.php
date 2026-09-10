@@ -49,6 +49,7 @@
                                         @endif
                                         <a href="#" data-toggle="modal" data-target="#topupModal"
                                             class="dropdown-item">Credit/Debit</a>
+                                        {{-- 
                                         <a href="#" data-toggle="modal" data-target="#addSecondAccountModal" class="dropdown-item">
                                             Add/Edit 2nd Account ID
                                         </a>
@@ -67,6 +68,7 @@
                                         <a href="{{ route('admin.fourth.create', ['user_id' => $user->id]) }}" class="dropdown-item text-primary">
                                             <i class="fa fa-plus mr-1"></i> Create 4th Account
                                         </a>
+                                        --}}
                                         <a href="#" data-toggle="modal" data-target="#addSecondAccountModaldep" class="dropdown-item">
                                             Manage Deposit 
                                         </a>

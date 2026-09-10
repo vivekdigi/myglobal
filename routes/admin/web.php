@@ -60,6 +60,10 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin/dashboard')->group(function
 
     Route::post('user/add-second-account', [ManageUsersController::class, 'addSecondAccount'])
         ->name('admin.user.addSecondAccount');
+    Route::post('user/add-third-account', [ManageUsersController::class, 'addThirdAccount'])
+        ->name('admin.user.addThirdAccount');
+    Route::post('user/add-fourth-account', [ManageUsersController::class, 'addFourthAccount'])
+        ->name('admin.user.addFourthAccount');
     Route::post('user/add-second-accountdep', [ManageDepositController::class, 'adddeposit'])
         ->name('admin.user.addSecondAccountdep');
 
@@ -381,9 +385,16 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin/dashboard')->group(function
         Route::get('secondary-accounts', 'secondaryList')->name('admin.secondary.list');
         Route::get('create-secondary-account', 'createForm')->name('admin.secondary.create');
         Route::post('create-secondary-account', 'store')->name('admin.secondary.store');
+        // Third Account Requests & Accounts
+        Route::get('third-account-requests', 'thirdIndex')->name('admin.third.requests');
+        Route::post('third-account-requests/{id}/status', 'updateThirdStatus')->name('admin.third.status');
         Route::get('create-third-account', 'createThirdForm')->name('admin.third.create');
         Route::post('create-third-account', 'storeThird')->name('admin.third.store');
         Route::get('third-accounts', 'thirdList')->name('admin.third.list');
+
+        // Fourth Account Requests & Accounts
+        Route::get('fourth-account-requests', 'fourthIndex')->name('admin.fourth.requests');
+        Route::post('fourth-account-requests/{id}/status', 'updateFourthStatus')->name('admin.fourth.status');
         Route::get('create-fourth-account', 'createFourthForm')->name('admin.fourth.create');
         Route::post('create-fourth-account', 'storeFourth')->name('admin.fourth.store');
         Route::get('fourth-accounts', 'fourthList')->name('admin.fourth.list');

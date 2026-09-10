@@ -28,19 +28,51 @@ class ManageUsersController extends Controller
     use PingServer;
     public function addSecondAccount(Request $request)
     {
-    $request->validate([
-        'user_id' => 'required|exists:users,id',
-        'second_account_id' => 'required|string',
-    ]);
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'second_account_id' => 'required|string',
+        ]);
 
-    $user = User::find($request->user_id);
+        $user = User::find($request->user_id);
 
-    // Save in your chosen column (example: second_account_id)
-    $user->update([
-        'accountid_sec' => $request->second_account_id,
-    ]);
+        // Save in your chosen column (example: second_account_id)
+        $user->update([
+            'accountid_sec' => $request->second_account_id,
+        ]);
 
-    return redirect()->back()->with('success', 'Second Account ID added successfully.');
+        return redirect()->back()->with('success', 'Second Account ID added successfully.');
+    }
+
+    public function addThirdAccount(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'third_account_id' => 'required|string',
+        ]);
+
+        $user = User::find($request->user_id);
+
+        $user->update([
+            'accountid_third' => $request->third_account_id,
+        ]);
+
+        return redirect()->back()->with('success', 'Third Account ID added successfully.');
+    }
+
+    public function addFourthAccount(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'fourth_account_id' => 'required|string',
+        ]);
+
+        $user = User::find($request->user_id);
+
+        $user->update([
+            'accountid_fourth' => $request->fourth_account_id,
+        ]);
+
+        return redirect()->back()->with('success', 'Fourth Account ID added successfully.');
     }
 
     // See user wallet balances
@@ -369,79 +401,6 @@ class ManageUsersController extends Controller
                     }
                 });
         }
-
-        return redirect()->back()->with('success', 'Your message was sent successfully!');
-    }
-
-    // Delete User investment Plan
-    public function deleteplan($id)
-    {
-        User_plans::where('id', $id)->delete();
-        return redirect()->back()->with('success', 'User Plan deleted successfully!');
-    }
-
-    public function referralsOverview(Request $request)
-    {
-        $search = $request->get('search');
-        $userId = $request->get('user_id');
-
-        $users = User::withCount('referrals as referral_count')
-            ->with('referrer')
-            ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhere('accountid', 'like', "%{$search}%");
-            })
-            ->orderByDesc('referral_count')
-            ->paginate(20)
-            ->withQueryString();
-
-        // Build downlines HTML for drill-down view
-        $downlines = '';
-        if ($userId) {
-            $allUsers  = User::all();
-            $uc        = new \App\Http\Controllers\User\UsersController();
-            $downlines = $uc->getdownlines($allUsers, $userId);
-        }
-
-        return view('admin.Users.referrals-overview', [
-            'title'     => 'Referral Overview',
-            'users'     => $users,
-            'search'    => $search,
-            'downlines' => $downlines,
-        ]);
-    }
-
-    public function saveuser(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|max:255',
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        $thisid = DB::table('users')->insertGetId([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'ref_by' => NULL,
-            'username' => $request['username'],
-            'password' => Hash::make($request->password),
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now(),
-        ]);
-
-        //assign referal link to user
-        $settings = Settings::where('id', '=', '1')->first();
-        $user = User::where('id', $thisid)->first();
-
-        User::where('id', $thisid)
-            ->update([
-                'ref_link' => $settings->site_address . '/ref/' . $user->username,
-            ]);
-        return redirect()->back()->with('success', 'User created Sucessfully!');
-    }
-}
 
         return redirect()->back()->with('success', 'Your message was sent successfully!');
     }

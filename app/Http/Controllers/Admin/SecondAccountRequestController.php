@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CryptoAccount;
 use App\Models\SecondAccountRequest;
+use App\Models\ThirdAccountRequest;
+use App\Models\FourthAccountRequest;
 use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -79,6 +81,98 @@ class SecondAccountRequestController extends Controller
         SecondAccountRequest::whereIn('id', $request->ids)->delete();
 
         return redirect()->route('admin.second.requests')->with('success', "{$count} second account request(s) deleted successfully.");
+    }
+
+    public function thirdIndex(Request $request)
+    {
+        $search = $request->get('search');
+
+        if (Schema::hasTable('third_account_requests')) {
+            $requests = ThirdAccountRequest::with('user')
+                ->when($search, function ($q) use ($search) {
+                    $q->where('user_name', 'like', "%{$search}%")
+                      ->orWhere('user_email', 'like', "%{$search}%");
+                })
+                ->orderByDesc('id')
+                ->paginate(10)
+                ->withQueryString();
+        } else {
+            $requests = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+        }
+
+        $createdUserIds = User::where('is_secondary', 2)
+            ->whereNotNull('parent_user_id')
+            ->pluck('parent_user_id')
+            ->toArray();
+
+        $thirdCountMap = User::where('is_secondary', 2)
+            ->whereNotNull('parent_user_id')
+            ->selectRaw('parent_user_id, count(*) as cnt')
+            ->groupBy('parent_user_id')
+            ->pluck('cnt', 'parent_user_id');
+
+        return view('admin.third-account-requests.index', [
+            'title'             => 'Third Account Requests',
+            'requests'          => $requests,
+            'search'            => $search,
+            'createdUserIds'    => $createdUserIds,
+            'thirdCountMap'     => $thirdCountMap,
+        ]);
+    }
+
+    public function updateThirdStatus(Request $request, $id)
+    {
+        $request->validate(['status' => 'required|in:approved,rejected']);
+        if (Schema::hasTable('third_account_requests')) {
+            ThirdAccountRequest::findOrFail($id)->update(['status' => $request->status]);
+        }
+        return redirect()->back()->with('success', 'Request updated to ' . ucfirst($request->status) . '.');
+    }
+
+    public function fourthIndex(Request $request)
+    {
+        $search = $request->get('search');
+
+        if (Schema::hasTable('fourth_account_requests')) {
+            $requests = FourthAccountRequest::with('user')
+                ->when($search, function ($q) use ($search) {
+                    $q->where('user_name', 'like', "%{$search}%")
+                      ->orWhere('user_email', 'like', "%{$search}%");
+                })
+                ->orderByDesc('id')
+                ->paginate(10)
+                ->withQueryString();
+        } else {
+            $requests = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+        }
+
+        $createdUserIds = User::where('is_secondary', 3)
+            ->whereNotNull('parent_user_id')
+            ->pluck('parent_user_id')
+            ->toArray();
+
+        $fourthCountMap = User::where('is_secondary', 3)
+            ->whereNotNull('parent_user_id')
+            ->selectRaw('parent_user_id, count(*) as cnt')
+            ->groupBy('parent_user_id')
+            ->pluck('cnt', 'parent_user_id');
+
+        return view('admin.fourth-account-requests.index', [
+            'title'             => 'Fourth Account Requests',
+            'requests'          => $requests,
+            'search'            => $search,
+            'createdUserIds'    => $createdUserIds,
+            'fourthCountMap'    => $fourthCountMap,
+        ]);
+    }
+
+    public function updateFourthStatus(Request $request, $id)
+    {
+        $request->validate(['status' => 'required|in:approved,rejected']);
+        if (Schema::hasTable('fourth_account_requests')) {
+            FourthAccountRequest::findOrFail($id)->update(['status' => $request->status]);
+        }
+        return redirect()->back()->with('success', 'Request updated to ' . ucfirst($request->status) . '.');
     }
 
     // ─── Delete secondary user account (soft delete) ─────────────────────────
@@ -379,16 +473,33 @@ class SecondAccountRequestController extends Controller
 
     public function destroyThird($id)
     {
-        $third = User::where('id', $id)->where('is_secondary', 2)->firstOrFail();
-        $third->delete();
-        return redirect()->route('admin.third.list')->with('success', 'Third account moved to trash.');
+        $third = User::where('id', $id)->where('is_secondary', 2)->first();
+        if ($third) {
+            $third->delete();
+            return redirect()->back()->with('success', 'Third account moved to trash.');
+        }
+
+        if (Schema::hasTable('third_account_requests')) {
+            $req = ThirdAccountRequest::find($id);
+            if ($req) {
+                $req->delete();
+                return redirect()->back()->with('success', 'Third account request deleted successfully.');
+            }
+        }
+
+        return redirect()->back()->with('success', 'Item deleted.');
     }
 
     public function bulkDestroyThird(Request $request)
     {
         $request->validate(['ids' => 'required|array', 'ids.*' => 'integer']);
-        $count = User::whereIn('id', $request->ids)->where('is_secondary', 2)->delete();
-        return redirect()->route('admin.third.list')->with('success', "{$count} third account(s) moved to trash.");
+        User::whereIn('id', $request->ids)->where('is_secondary', 2)->delete();
+
+        if (Schema::hasTable('third_account_requests')) {
+            ThirdAccountRequest::whereIn('id', $request->ids)->delete();
+        }
+
+        return redirect()->back()->with('success', 'Selected items deleted.');
     }
 
     public function trashedThird(Request $request)
@@ -484,16 +595,33 @@ class SecondAccountRequestController extends Controller
 
     public function destroyFourth($id)
     {
-        $fourth = User::where('id', $id)->where('is_secondary', 3)->firstOrFail();
-        $fourth->delete();
-        return redirect()->route('admin.fourth.list')->with('success', 'Fourth account moved to trash.');
+        $fourth = User::where('id', $id)->where('is_secondary', 3)->first();
+        if ($fourth) {
+            $fourth->delete();
+            return redirect()->back()->with('success', 'Fourth account moved to trash.');
+        }
+
+        if (Schema::hasTable('fourth_account_requests')) {
+            $req = FourthAccountRequest::find($id);
+            if ($req) {
+                $req->delete();
+                return redirect()->back()->with('success', 'Fourth account request deleted successfully.');
+            }
+        }
+
+        return redirect()->back()->with('success', 'Item deleted.');
     }
 
     public function bulkDestroyFourth(Request $request)
     {
         $request->validate(['ids' => 'required|array', 'ids.*' => 'integer']);
-        $count = User::whereIn('id', $request->ids)->where('is_secondary', 3)->delete();
-        return redirect()->route('admin.fourth.list')->with('success', "{$count} fourth account(s) moved to trash.");
+        User::whereIn('id', $request->ids)->where('is_secondary', 3)->delete();
+
+        if (Schema::hasTable('fourth_account_requests')) {
+            FourthAccountRequest::whereIn('id', $request->ids)->delete();
+        }
+
+        return redirect()->back()->with('success', 'Selected items deleted.');
     }
 
     public function trashedFourth(Request $request)
@@ -618,6 +746,10 @@ class SecondAccountRequestController extends Controller
 
         $parent->update(['accountid_third' => $request->accountid]);
 
+        if (Schema::hasTable('third_account_requests')) {
+            ThirdAccountRequest::where('user_id', $parent->id)->update(['status' => 'approved']);
+        }
+
         $this->sendAccountWelcomeEmail($third, $parent, $request);
 
         return redirect()->back()
@@ -686,6 +818,10 @@ class SecondAccountRequestController extends Controller
         CryptoAccount::create(['user_id' => $fourth->id]);
 
         $parent->update(['accountid_fourth' => $request->accountid]);
+
+        if (Schema::hasTable('fourth_account_requests')) {
+            FourthAccountRequest::where('user_id', $parent->id)->update(['status' => 'approved']);
+        }
 
         $this->sendAccountWelcomeEmail($fourth, $parent, $request);
 
