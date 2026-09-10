@@ -113,7 +113,8 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('admin.second.requests') ? 'active' : '' }}">
+                    {{-- 2nd Account Requests --}}
+                    <li class="nav-item {{ request()->routeIs('admin.second.*') || request()->routeIs('admin.secondary.*') ? 'active' : '' }}">
                         <a data-toggle="collapse" href="#secondacct">
                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                             <p>2nd Account Requests
@@ -123,7 +124,7 @@
                                 <span class="caret"></span>
                             </p>
                         </a>
-                        <div class="collapse {{ request()->routeIs('admin.second.*') || request()->routeIs('admin.secondary.*') || request()->routeIs('admin.third.*') || request()->routeIs('admin.fourth.*') ? 'show' : '' }}" id="secondacct">
+                        <div class="collapse {{ request()->routeIs('admin.second.*') || request()->routeIs('admin.secondary.*') ? 'show' : '' }}" id="secondacct">
                             <ul class="nav nav-collapse">
                                 <li>
                                     <a href="{{ route('admin.second.requests') }}">
@@ -144,9 +145,47 @@
                                         <span class="sub-item">Create 2nd Account</span>
                                     </a>
                                 </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- 3rd Account Requests --}}
+                    <li class="nav-item {{ request()->routeIs('admin.third.*') ? 'active' : '' }}">
+                        <a data-toggle="collapse" href="#thirdacct">
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <p>3rd Account Requests
+                                <span class="caret"></span>
+                            </p>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('admin.third.*') ? 'show' : '' }}" id="thirdacct">
+                            <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="{{ route('admin.third.list') }}">
+                                        <span class="sub-item">All 3rd Accounts</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{{ route('admin.third.create') }}">
                                         <span class="sub-item">Create 3rd Account</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- 4th Account Requests --}}
+                    <li class="nav-item {{ request()->routeIs('admin.fourth.*') ? 'active' : '' }}">
+                        <a data-toggle="collapse" href="#fourthacct">
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <p>4th Account Requests
+                                <span class="caret"></span>
+                            </p>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('admin.fourth.*') ? 'show' : '' }}" id="fourthacct">
+                            <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="{{ route('admin.fourth.list') }}">
+                                        <span class="sub-item">All 4th Accounts</span>
                                     </a>
                                 </li>
                                 <li>

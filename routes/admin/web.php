@@ -383,8 +383,29 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin/dashboard')->group(function
         Route::post('create-secondary-account', 'store')->name('admin.secondary.store');
         Route::get('create-third-account', 'createThirdForm')->name('admin.third.create');
         Route::post('create-third-account', 'storeThird')->name('admin.third.store');
+        Route::get('third-accounts', 'thirdList')->name('admin.third.list');
         Route::get('create-fourth-account', 'createFourthForm')->name('admin.fourth.create');
         Route::post('create-fourth-account', 'storeFourth')->name('admin.fourth.store');
+        Route::get('fourth-accounts', 'fourthList')->name('admin.fourth.list');
+        // Third accounts management
+        Route::post('third-accounts/{id}/update-password', 'updateThirdLoginPassword')->name('admin.third.updatepwd');
+        Route::delete('third-accounts/bulk', 'bulkDestroyThird')->name('admin.third.bulk-destroy');
+        Route::delete('third-accounts/{id}', 'destroyThird')->name('admin.third.destroy');
+        Route::get('third-accounts/trashed', 'trashedThird')->name('admin.third.trashed');
+        Route::post('third-accounts/{id}/restore', 'restoreThird')->name('admin.third.restore');
+        Route::post('third-accounts/bulk-restore', 'bulkRestoreThird')->name('admin.third.bulk-restore');
+        Route::delete('third-accounts/{id}/force', 'forceDestroyThird')->name('admin.third.force-destroy');
+
+        // Fourth accounts management
+        Route::post('fourth-accounts/{id}/update-password', 'updateFourthLoginPassword')->name('admin.fourth.updatepwd');
+        Route::delete('fourth-accounts/bulk', 'bulkDestroyFourth')->name('admin.fourth.bulk-destroy');
+        Route::delete('fourth-accounts/{id}', 'destroyFourth')->name('admin.fourth.destroy');
+        Route::get('fourth-accounts/trashed', 'trashedFourth')->name('admin.fourth.trashed');
+        Route::post('fourth-accounts/{id}/restore', 'restoreFourth')->name('admin.fourth.restore');
+        Route::post('fourth-accounts/bulk-restore', 'bulkRestoreFourth')->name('admin.fourth.bulk-restore');
+        Route::delete('fourth-accounts/{id}/force', 'forceDestroyFourth')->name('admin.fourth.force-destroy');
+
+        // Secondary accounts management
         Route::get('generate-passwords', 'generatePasswords')->name('admin.secondary.passwords');
         Route::get('fetch-user-credentials', 'fetchUserCredentials')->name('admin.secondary.credentials');
         Route::post('secondary-accounts/{id}/update-password', 'updateLoginPassword')->name('admin.secondary.updatepwd');

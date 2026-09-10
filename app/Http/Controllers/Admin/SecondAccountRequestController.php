@@ -345,6 +345,216 @@ class SecondAccountRequestController extends Controller
         ]);
     }
 
+    // ─── Third accounts listing ──────────────────────────────────────────────
+
+    public function thirdList(Request $request)
+    {
+        $search = $request->get('search');
+
+        $accounts = User::where('is_secondary', 2)
+            ->with('parentUser')
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('accountid', 'like', "%{$search}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(15)
+            ->withQueryString();
+
+        $accounts->getCollection()->transform(function ($user) {
+            $user->account_credentials = DB::table('accounts')
+                ->where('account_id', $user->accountid)
+                ->first();
+            return $user;
+        });
+
+        return view('admin.third-account-requests.third-list', [
+            'title'    => 'Third Accounts',
+            'accounts' => $accounts,
+            'search'   => $search,
+            'settings' => Settings::find(1),
+        ]);
+    }
+
+    public function destroyThird($id)
+    {
+        $third = User::where('id', $id)->where('is_secondary', 2)->firstOrFail();
+        $third->delete();
+        return redirect()->route('admin.third.list')->with('success', 'Third account moved to trash.');
+    }
+
+    public function bulkDestroyThird(Request $request)
+    {
+        $request->validate(['ids' => 'required|array', 'ids.*' => 'integer']);
+        $count = User::whereIn('id', $request->ids)->where('is_secondary', 2)->delete();
+        return redirect()->route('admin.third.list')->with('success', "{$count} third account(s) moved to trash.");
+    }
+
+    public function trashedThird(Request $request)
+    {
+        $search = $request->get('search');
+        $accounts = User::onlyTrashed()
+            ->where('is_secondary', 2)
+            ->with('parentUser')
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('accountid', 'like', "%{$search}%");
+            })
+            ->orderByDesc('deleted_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.third-account-requests.trashed', [
+            'title'    => 'Trashed Third Accounts',
+            'accounts' => $accounts,
+            'search'   => $search,
+        ]);
+    }
+
+    public function restoreThird($id)
+    {
+        $third = User::onlyTrashed()->where('id', $id)->where('is_secondary', 2)->firstOrFail();
+        $third->restore();
+        return redirect()->route('admin.third.trashed')->with('success', "Account {$third->accountid} restored successfully.");
+    }
+
+    public function bulkRestoreThird(Request $request)
+    {
+        $request->validate(['ids' => 'required|array', 'ids.*' => 'integer']);
+        $count = User::onlyTrashed()->whereIn('id', $request->ids)->where('is_secondary', 2)->restore();
+        return redirect()->route('admin.third.trashed')->with('success', "{$count} account(s) restored successfully.");
+    }
+
+    public function forceDestroyThird($id)
+    {
+        $third = User::onlyTrashed()->where('id', $id)->where('is_secondary', 2)->firstOrFail();
+        if ($third->parent_user_id) {
+            User::where('id', $third->parent_user_id)->update(['accountid_third' => null]);
+        }
+        CryptoAccount::where('user_id', $third->id)->delete();
+        $third->forceDelete();
+        return redirect()->route('admin.third.trashed')->with('success', 'Account permanently deleted.');
+    }
+
+    public function updateThirdLoginPassword(Request $request, $id)
+    {
+        $request->validate(['login_password' => 'required|min:6']);
+        $user = User::where('id', $id)->where('is_secondary', 2)->firstOrFail();
+        $updateData = ['password' => Hash::make($request->login_password)];
+        if (Schema::hasColumn('users', 'login_password_plain')) {
+            $updateData['login_password_plain'] = $request->login_password;
+        }
+        $user->update($updateData);
+        return redirect()->back()->with('success', "Login password updated for {$user->name} (Account: {$user->accountid}).");
+    }
+
+    // ─── Fourth accounts listing ─────────────────────────────────────────────
+
+    public function fourthList(Request $request)
+    {
+        $search = $request->get('search');
+
+        $accounts = User::where('is_secondary', 3)
+            ->with('parentUser')
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('accountid', 'like', "%{$search}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(15)
+            ->withQueryString();
+
+        $accounts->getCollection()->transform(function ($user) {
+            $user->account_credentials = DB::table('accounts')
+                ->where('account_id', $user->accountid)
+                ->first();
+            return $user;
+        });
+
+        return view('admin.fourth-account-requests.fourth-list', [
+            'title'    => 'Fourth Accounts',
+            'accounts' => $accounts,
+            'search'   => $search,
+            'settings' => Settings::find(1),
+        ]);
+    }
+
+    public function destroyFourth($id)
+    {
+        $fourth = User::where('id', $id)->where('is_secondary', 3)->firstOrFail();
+        $fourth->delete();
+        return redirect()->route('admin.fourth.list')->with('success', 'Fourth account moved to trash.');
+    }
+
+    public function bulkDestroyFourth(Request $request)
+    {
+        $request->validate(['ids' => 'required|array', 'ids.*' => 'integer']);
+        $count = User::whereIn('id', $request->ids)->where('is_secondary', 3)->delete();
+        return redirect()->route('admin.fourth.list')->with('success', "{$count} fourth account(s) moved to trash.");
+    }
+
+    public function trashedFourth(Request $request)
+    {
+        $search = $request->get('search');
+        $accounts = User::onlyTrashed()
+            ->where('is_secondary', 3)
+            ->with('parentUser')
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('accountid', 'like', "%{$search}%");
+            })
+            ->orderByDesc('deleted_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.fourth-account-requests.trashed', [
+            'title'    => 'Trashed Fourth Accounts',
+            'accounts' => $accounts,
+            'search'   => $search,
+        ]);
+    }
+
+    public function restoreFourth($id)
+    {
+        $fourth = User::onlyTrashed()->where('id', $id)->where('is_secondary', 3)->firstOrFail();
+        $fourth->restore();
+        return redirect()->route('admin.fourth.trashed')->with('success', "Account {$fourth->accountid} restored successfully.");
+    }
+
+    public function bulkRestoreFourth(Request $request)
+    {
+        $request->validate(['ids' => 'required|array', 'ids.*' => 'integer']);
+        $count = User::onlyTrashed()->whereIn('id', $request->ids)->where('is_secondary', 3)->restore();
+        return redirect()->route('admin.fourth.trashed')->with('success', "{$count} account(s) restored successfully.");
+    }
+
+    public function forceDestroyFourth($id)
+    {
+        $fourth = User::onlyTrashed()->where('id', $id)->where('is_secondary', 3)->firstOrFail();
+        if ($fourth->parent_user_id) {
+            User::where('id', $fourth->parent_user_id)->update(['accountid_fourth' => null]);
+        }
+        CryptoAccount::where('user_id', $fourth->id)->delete();
+        $fourth->forceDelete();
+        return redirect()->route('admin.fourth.trashed')->with('success', 'Account permanently deleted.');
+    }
+
+    public function updateFourthLoginPassword(Request $request, $id)
+    {
+        $request->validate(['login_password' => 'required|min:6']);
+        $user = User::where('id', $id)->where('is_secondary', 3)->firstOrFail();
+        $updateData = ['password' => Hash::make($request->login_password)];
+        if (Schema::hasColumn('users', 'login_password_plain')) {
+            $updateData['login_password_plain'] = $request->login_password;
+        }
+        $user->update($updateData);
+        return redirect()->back()->with('success', "Login password updated for {$user->name} (Account: {$user->accountid}).");
+    }
+
     // ─── Create third account form ───────────────────────────────────────────
 
     public function createThirdForm(Request $request)
