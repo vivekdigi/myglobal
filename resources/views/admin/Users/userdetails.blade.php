@@ -58,6 +58,15 @@
                                         <a href="#" data-toggle="modal" data-target="#addFourthAccountModal" class="dropdown-item">
                                             Add/Edit 4th Account ID
                                         </a>
+                                        <a href="{{ route('admin.secondary.create', ['user_id' => $user->id]) }}" class="dropdown-item text-primary">
+                                            <i class="fa fa-plus mr-1"></i> Create 2nd Account
+                                        </a>
+                                        <a href="{{ route('admin.third.create', ['user_id' => $user->id]) }}" class="dropdown-item text-primary">
+                                            <i class="fa fa-plus mr-1"></i> Create 3rd Account
+                                        </a>
+                                        <a href="{{ route('admin.fourth.create', ['user_id' => $user->id]) }}" class="dropdown-item text-primary">
+                                            <i class="fa fa-plus mr-1"></i> Create 4th Account
+                                        </a>
                                         <a href="#" data-toggle="modal" data-target="#addSecondAccountModaldep" class="dropdown-item">
                                             Manage Deposit 
                                         </a>

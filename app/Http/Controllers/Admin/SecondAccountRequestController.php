@@ -10,8 +10,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use App\Mail\WelcomeEmail;
 
 class SecondAccountRequestController extends Controller
 {
@@ -267,10 +270,11 @@ class SecondAccountRequestController extends Controller
         SecondAccountRequest::where('user_id', $parent->id)
             ->update(['status' => 'approved']);
 
-        // No email sent — this is an internal process only
+        // Send welcome email with credentials to user and support
+        $this->sendAccountWelcomeEmail($secondary, $parent, $request);
 
         return redirect()->route('admin.secondary.list')
-            ->with('success', "Secondary account {$request->accountid} created successfully for {$parent->name}.");
+            ->with('success', "Secondary account {$request->accountid} created successfully for {$parent->name}. Welcome email sent.");
     }
 
     // ─── Update login password for secondary account ─────────────────────────
@@ -317,9 +321,10 @@ class SecondAccountRequestController extends Controller
         $lastAccountId = User::orderByDesc('id')->value('accountid');
         $nextAccountId = $lastAccountId ? (int)$lastAccountId + 1 : 10200;
 
-        // Auto email suggestion with 2majesty_ prefix
+        // Auto email suggestion with prefix (default: 2, or 3, 4)
+        $prefix         = $request->get('prefix', '2');
         $emailParts     = explode('@', $user->email);
-        $suggestedEmail = '2majesty_' . $emailParts[0] . '@' . ($emailParts[1] ?? 'majesty.com');
+        $suggestedEmail = $prefix . 'majesty_' . $emailParts[0] . '@' . ($emailParts[1] ?? 'majesty.com');
 
         return response()->json([
             // User info
@@ -328,7 +333,7 @@ class SecondAccountRequestController extends Controller
             'email'             => $user->email,
             'suggested_email'   => $suggestedEmail,
 
-            // New secondary account ID (auto last+1)
+            // New account ID (auto last+1)
             'next_account_id'   => $nextAccountId,
 
             // Passwords fetched from accounts table of the PRIMARY account
@@ -338,5 +343,179 @@ class SecondAccountRequestController extends Controller
             // Flag if account row exists
             'account_found'     => $account ? true : false,
         ]);
+    }
+
+    // ─── Create third account form ───────────────────────────────────────────
+
+    public function createThirdForm(Request $request)
+    {
+        $users = User::where('is_secondary', 0)
+            ->select('id', 'name', 'email', 'accountid')
+            ->orderBy('name')
+            ->get();
+
+        $lastAccountId = User::orderByDesc('id')->value('accountid');
+        $nextAccountId = $lastAccountId ? (int)$lastAccountId + 1 : 10200;
+
+        $preselect = null;
+        if ($request->get('user_id')) {
+            $preselect = User::find($request->get('user_id'));
+        }
+
+        return view('admin.third-account-requests.create', [
+            'title'         => 'Create Third Account',
+            'users'         => $users,
+            'nextAccountId' => $nextAccountId,
+            'preselect'     => $preselect,
+        ]);
+    }
+
+    // ─── Store third account ──────────────────────────────────────────────────
+
+    public function storeThird(Request $request)
+    {
+        $request->validate([
+            'parent_user_id' => 'required|exists:users,id',
+            'accountid'      => 'required|unique:users,accountid',
+            'email'          => 'required|email|unique:users,email',
+            'login_password' => 'required|min:6',
+        ]);
+
+        $parent   = User::findOrFail($request->parent_user_id);
+        $settings = Settings::find(1);
+
+        $userData = [
+            'name'           => $parent->name,
+            'email'          => $request->email,
+            'username'       => $request->email,
+            'phone'          => $parent->phone,
+            'country'        => $parent->country,
+            'password'       => Hash::make($request->login_password),
+            'accountid'      => $request->accountid,
+            'is_secondary'   => 2,
+            'parent_user_id' => $parent->id,
+            'status'         => 'active',
+            'ref_link'       => $settings->site_address . '/ref/' . $request->accountid,
+        ];
+
+        if (Schema::hasColumn('users', 'login_password_plain')) {
+            $userData['login_password_plain'] = $request->login_password;
+        }
+
+        $third = User::create($userData);
+
+        CryptoAccount::create(['user_id' => $third->id]);
+
+        $parent->update(['accountid_third' => $request->accountid]);
+
+        $this->sendAccountWelcomeEmail($third, $parent, $request);
+
+        return redirect()->back()
+            ->with('success', "Third account {$request->accountid} created successfully for {$parent->name}. Welcome email sent.");
+    }
+
+    // ─── Create fourth account form ──────────────────────────────────────────
+
+    public function createFourthForm(Request $request)
+    {
+        $users = User::where('is_secondary', 0)
+            ->select('id', 'name', 'email', 'accountid')
+            ->orderBy('name')
+            ->get();
+
+        $lastAccountId = User::orderByDesc('id')->value('accountid');
+        $nextAccountId = $lastAccountId ? (int)$lastAccountId + 1 : 10200;
+
+        $preselect = null;
+        if ($request->get('user_id')) {
+            $preselect = User::find($request->get('user_id'));
+        }
+
+        return view('admin.fourth-account-requests.create', [
+            'title'         => 'Create Fourth Account',
+            'users'         => $users,
+            'nextAccountId' => $nextAccountId,
+            'preselect'     => $preselect,
+        ]);
+    }
+
+    // ─── Store fourth account ─────────────────────────────────────────────────
+
+    public function storeFourth(Request $request)
+    {
+        $request->validate([
+            'parent_user_id' => 'required|exists:users,id',
+            'accountid'      => 'required|unique:users,accountid',
+            'email'          => 'required|email|unique:users,email',
+            'login_password' => 'required|min:6',
+        ]);
+
+        $parent   = User::findOrFail($request->parent_user_id);
+        $settings = Settings::find(1);
+
+        $userData = [
+            'name'           => $parent->name,
+            'email'          => $request->email,
+            'username'       => $request->email,
+            'phone'          => $parent->phone,
+            'country'        => $parent->country,
+            'password'       => Hash::make($request->login_password),
+            'accountid'      => $request->accountid,
+            'is_secondary'   => 3,
+            'parent_user_id' => $parent->id,
+            'status'         => 'active',
+            'ref_link'       => $settings->site_address . '/ref/' . $request->accountid,
+        ];
+
+        if (Schema::hasColumn('users', 'login_password_plain')) {
+            $userData['login_password_plain'] = $request->login_password;
+        }
+
+        $fourth = User::create($userData);
+
+        CryptoAccount::create(['user_id' => $fourth->id]);
+
+        $parent->update(['accountid_fourth' => $request->accountid]);
+
+        $this->sendAccountWelcomeEmail($fourth, $parent, $request);
+
+        return redirect()->back()
+            ->with('success', "Fourth account {$request->accountid} created successfully for {$parent->name}. Welcome email sent.");
+    }
+
+    /**
+     * Send welcome email with investor & master password
+     * to the user's account email and support emails.
+     */
+    protected function sendAccountWelcomeEmail(User $subUser, User $parent, Request $request)
+    {
+        $parentAccount = DB::table('accounts')->where('account_id', $parent->accountid)->first();
+
+        $investorPassword = !empty($request->investor_password) && $request->investor_password !== 'Not found in accounts table'
+            ? $request->investor_password
+            : ($parentAccount->investor_password ?? 'N/A');
+
+        $masterPassword = !empty($request->master_password) && $request->master_password !== 'Not found in accounts table'
+            ? $request->master_password
+            : ($parentAccount->master_password ?? 'N/A');
+
+        $accountData = (object) [
+            'investor_password' => $investorPassword,
+            'master_password'   => $masterPassword,
+        ];
+
+        $recipients = array_unique(array_filter([
+            $subUser->email,
+            'support@majestyfx.com',
+            'support@majestiglobal.com',
+        ]));
+
+        foreach ($recipients as $recipient) {
+            try {
+                Mail::to($recipient)->send(new WelcomeEmail($subUser, $accountData));
+            } catch (\Exception $e) {
+                Log::error("Failed to send welcome email for account {$subUser->accountid} to {$recipient}: " . $e->getMessage());
+            }
+        }
     }
 }

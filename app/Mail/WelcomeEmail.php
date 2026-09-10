@@ -16,14 +16,28 @@ class WelcomeEmail extends Mailable
     public $user;
     public $account;
 
-    public function __construct(User $user)
+    public function __construct(User $user, $account = null)
     {
         $this->user = $user;
 
-        // ✅ Fetch account using SQL here
-        $this->account = DB::table('accounts')
-                            ->where('account_id', $user->accountid)
-                            ->first();
+        if ($account && (is_object($account) || is_array($account))) {
+            $this->account = is_array($account) ? (object) $account : $account;
+        } else {
+            // Fetch account using SQL
+            $this->account = DB::table('accounts')
+                                ->where('account_id', $user->accountid)
+                                ->first();
+
+            // If not found and user is a secondary/sub account, fallback to parent's account
+            if (!$this->account && !empty($user->parent_user_id)) {
+                $parent = User::find($user->parent_user_id);
+                if ($parent) {
+                    $this->account = DB::table('accounts')
+                                        ->where('account_id', $parent->accountid)
+                                        ->first();
+                }
+            }
+        }
     }
 
     public function build()

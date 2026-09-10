@@ -3,11 +3,11 @@
 
     <div class="mt-2 mb-3 d-flex justify-content-between align-items-center">
         <div>
-            <h4 class="title1 mb-0">Create Secondary Account</h4>
-            <small class="text-muted">Create a second trading account for an existing user</small>
+            <h4 class="title1 mb-0">Create Fourth Account</h4>
+            <small class="text-muted">Create a fourth trading account for an existing user</small>
         </div>
         <a href="{{ route('admin.secondary.list') }}" class="btn btn-sm btn-outline-primary" style="border-radius:50px;">
-            <i class="fa fa-list mr-1"></i> View All Secondary Accounts
+            <i class="fa fa-list mr-1"></i> View All Accounts
         </a>
     </div>
 
@@ -17,10 +17,10 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fa fa-user-plus mr-2"></i>New Secondary Account</h5>
+                    <h5 class="mb-0"><i class="fa fa-user-plus mr-2"></i>New Fourth Account</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.secondary.store') }}" method="POST" id="createSecondaryForm">
+                    <form action="{{ route('admin.fourth.store') }}" method="POST" id="createFourthForm">
                         @csrf
 
                         {{-- ── User Search ── --}}
@@ -88,19 +88,19 @@
                             @enderror
                         </div>
 
-                        {{-- ── Secondary Email ── --}}
+                        {{-- ── Fourth Email ── --}}
                         <div class="form-group">
                             <label class="font-weight-bold">
-                                Secondary Account Email
+                                Fourth Account Email
                                 <span class="text-danger">*</span>
                             </label>
                             <div class="input-group">
                                 <input type="email"
                                        name="email"
-                                       id="secondaryEmail"
+                                       id="fourthEmail"
                                        class="form-control"
                                        value="{{ old('email') }}"
-                                       placeholder="e.g. 2majesty_username@gmail.com"
+                                       placeholder="e.g. 4majesty_username@gmail.com"
                                        required>
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-outline-secondary" id="autoEmailBtn">
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <small class="text-muted">
-                                Auto prefix: <code>2majesty_</code> + parent email
+                                Auto prefix: <code>4majesty_</code> + parent email
                             </small>
                             @error('email')
                                 <small class="text-danger">{{ $message }}</small>
@@ -134,7 +134,7 @@
                         <div id="passwordWarningBox" class="alert alert-warning py-2 px-3 d-none" style="font-size:.85rem;">
                             <i class="fa fa-exclamation-triangle mr-1"></i>
                             No credentials found in <code>accounts</code> table for this user's account ID.
-                            The secondary account will be created without passwords.
+                            The fourth account will be created without passwords.
                         </div>
 
                         {{-- ── Dashboard Login Password ── --}}
@@ -142,7 +142,7 @@
                             <label class="font-weight-bold">
                                 Dashboard Login Password
                                 <span class="text-danger">*</span>
-                                <small class="text-muted font-weight-normal">(for secondary account login)</small>
+                                <small class="text-muted font-weight-normal">(for fourth account login)</small>
                             </label>
                             <div class="input-group">
                                 <input type="text"
@@ -265,16 +265,16 @@ $(document).ready(function () {
 
         // Auto email
         var parts = email.split('@');
-        $('#secondaryEmail').val('2majesty_' + parts[0] + '@' + parts[1]);
+        $('#fourthEmail').val('4majesty_' + parts[0] + '@' + parts[1]);
 
         // Load credentials from accounts table
         loadCredentials(id);
     });
 
-    // ── Load credentials via AJAX ────────────────────────────────────────────
+    // ── Load credentials via AJAX ────────────────────────────────────
     function loadCredentials(userId) {
-        $.get('{{ route("admin.secondary.credentials") }}', { user_id: userId }, function (data) {
-            // New secondary account ID (last+1)
+        $.get('{{ route("admin.secondary.credentials") }}', { user_id: userId, prefix: '4' }, function (data) {
+            // New fourth account ID (last+1)
             $('#accountid').val(data.next_account_id);
 
             // Set hidden password fields
@@ -298,8 +298,8 @@ $(document).ready(function () {
                 $('#passwordWarningBox').removeClass('d-none');
             }
 
-            if (!$('#secondaryEmail').val()) {
-                $('#secondaryEmail').val(data.suggested_email);
+            if (!$('#fourthEmail').val()) {
+                $('#fourthEmail').val(data.suggested_email);
             }
 
         }).fail(function () {
@@ -312,7 +312,7 @@ $(document).ready(function () {
         if (!parentEmailStore) { alert('Please select a user first.'); return; }
         var parts     = parentEmailStore.split('@');
         var accountid = $('#accountid').val();
-        $('#secondaryEmail').val('2majesty_' + parts[0] + '_' + accountid + '@' + parts[1]);
+        $('#fourthEmail').val('4majesty_' + parts[0] + '_' + accountid + '@' + parts[1]);
     });
 
     // ── Clear / change user ──────────────────────────────────────────────────
@@ -321,7 +321,7 @@ $(document).ready(function () {
         parentEmailStore = '';
         $('#parentUserId').val('');
         $('#parentInfo').addClass('d-none');
-        $('#secondaryEmail').val('');
+        $('#fourthEmail').val('');
         $('#investorPassword').val('');
         $('#masterPassword').val('');
         $('#passwordInfoBox').addClass('d-none');

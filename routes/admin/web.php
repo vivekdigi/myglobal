@@ -381,6 +381,10 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin/dashboard')->group(function
         Route::get('secondary-accounts', 'secondaryList')->name('admin.secondary.list');
         Route::get('create-secondary-account', 'createForm')->name('admin.secondary.create');
         Route::post('create-secondary-account', 'store')->name('admin.secondary.store');
+        Route::get('create-third-account', 'createThirdForm')->name('admin.third.create');
+        Route::post('create-third-account', 'storeThird')->name('admin.third.store');
+        Route::get('create-fourth-account', 'createFourthForm')->name('admin.fourth.create');
+        Route::post('create-fourth-account', 'storeFourth')->name('admin.fourth.store');
         Route::get('generate-passwords', 'generatePasswords')->name('admin.secondary.passwords');
         Route::get('fetch-user-credentials', 'fetchUserCredentials')->name('admin.secondary.credentials');
         Route::post('secondary-accounts/{id}/update-password', 'updateLoginPassword')->name('admin.secondary.updatepwd');
