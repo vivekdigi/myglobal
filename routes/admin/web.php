@@ -381,12 +381,13 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin/dashboard')->group(function
         Route::get('secondary-accounts', 'secondaryList')->name('admin.secondary.list');
         Route::get('create-secondary-account', 'createForm')->name('admin.secondary.create');
         Route::post('create-secondary-account', 'store')->name('admin.secondary.store');
-        // Third Account Requests & Accounts
-        Route::get('third-account-requests', 'thirdIndex')->name('admin.third.requests');
-        Route::post('third-account-requests/{id}/status', 'updateThirdStatus')->name('admin.third.status');
         Route::get('create-third-account', 'createThirdForm')->name('admin.third.create');
         Route::post('create-third-account', 'storeThird')->name('admin.third.store');
         Route::get('third-accounts', 'thirdList')->name('admin.third.list');
+        Route::get('create-fourth-account', 'createFourthForm')->name('admin.fourth.create');
+        Route::post('create-fourth-account', 'storeFourth')->name('admin.fourth.store');
+        Route::get('fourth-accounts', 'fourthList')->name('admin.fourth.list');
+        // Third accounts management
         Route::post('third-accounts/{id}/update-password', 'updateThirdLoginPassword')->name('admin.third.updatepwd');
         Route::delete('third-accounts/bulk', 'bulkDestroyThird')->name('admin.third.bulk-destroy');
         Route::delete('third-accounts/{id}', 'destroyThird')->name('admin.third.destroy');
@@ -394,13 +395,6 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin/dashboard')->group(function
         Route::post('third-accounts/{id}/restore', 'restoreThird')->name('admin.third.restore');
         Route::post('third-accounts/bulk-restore', 'bulkRestoreThird')->name('admin.third.bulk-restore');
         Route::delete('third-accounts/{id}/force', 'forceDestroyThird')->name('admin.third.force-destroy');
-
-        // Fourth Account Requests & Accounts
-        Route::get('fourth-account-requests', 'fourthIndex')->name('admin.fourth.requests');
-        Route::post('fourth-account-requests/{id}/status', 'updateFourthStatus')->name('admin.fourth.status');
-        Route::get('create-fourth-account', 'createFourthForm')->name('admin.fourth.create');
-        Route::post('create-fourth-account', 'storeFourth')->name('admin.fourth.store');
-        Route::get('fourth-accounts', 'fourthList')->name('admin.fourth.list');
 
         // Fourth accounts management
         Route::post('fourth-accounts/{id}/update-password', 'updateFourthLoginPassword')->name('admin.fourth.updatepwd');

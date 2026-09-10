@@ -62,18 +62,12 @@ class AppServiceProvider extends ServiceProvider
             try {
                 $pendingDemoCount   = DemoAccountRequest::where('status', 'pending')->count();
                 $pendingSecondCount = SecondAccountRequest::where('status', 'pending')->count();
-                $pendingThirdCount  = \Illuminate\Support\Facades\Schema::hasTable('third_account_requests') ? \App\Models\ThirdAccountRequest::where('status', 'pending')->count() : 0;
-                $pendingFourthCount = \Illuminate\Support\Facades\Schema::hasTable('fourth_account_requests') ? \App\Models\FourthAccountRequest::where('status', 'pending')->count() : 0;
             } catch (\Exception $e) {
                 $pendingDemoCount   = 0;
                 $pendingSecondCount = 0;
-                $pendingThirdCount  = 0;
-                $pendingFourthCount = 0;
             }
             $view->with('pendingDemoCount', $pendingDemoCount);
             $view->with('pendingSecondCount', $pendingSecondCount);
-            $view->with('pendingThirdCount', $pendingThirdCount);
-            $view->with('pendingFourthCount', $pendingFourthCount);
         });
     }
 }
