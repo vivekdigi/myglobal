@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Redirect old subdomain to new domain/subdomain
+RewriteCond %{HTTP_HOST} ^my\.majestiglobal\.com$ [NC]
+RewriteRule ^(.*)$ https://my.majestiglobal.com/$1 [R=301,L]
+
+# Remove trailing slash
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# Laravel public redirect
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

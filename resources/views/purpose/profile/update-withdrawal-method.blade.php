@@ -1,0 +1,130 @@
+<form method="post" action="javascript:void(0)" id="updatewithdrawalinfo">
+    @csrf
+    @method('PUT')
+
+    @if ($bankTransfer?->status == 'enabled')
+        <fieldset>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Bank Name</label>
+                    <input type="text" name="bank_name" value="{{ Auth::user()->bank_name }}" class="form-control"
+                        placeholder="Enter bank name">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Account Name</label>
+                    <input type="text" name="account_name" value="{{ Auth::user()->account_name }}"
+                        class="form-control" placeholder="Enter Account name">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Account Number</label>
+                    <input type="text" name="account_no" value="{{ Auth::user()->account_number }}"
+                        class="form-control" placeholder="Enter Account Number">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Swift Code</label>
+                    <input type="text" name="swiftcode" value="{{ Auth::user()->swift_code }}" class="form-control"
+                        placeholder="Enter Swift Code">
+                </div>
+            </div>
+        </fieldset>
+    @endif
+
+
+    <fieldset class="mt-2">
+        <div class="form-row">
+
+            @if ($bitcoin?->status == 'enabled')
+                <div class="form-group col-md-6">
+                    <label>Bitcoin</label>
+                    <input type="text" name="btc_address" value="{{ Auth::user()->btc_address }}"
+                        class="form-control" placeholder="Enter Bitcoin Address">
+                    <small>Enter your Bitcoin Address that will be used to withdraw your funds</small>
+                </div>
+            @endif
+
+            @if ($ethereum?->status == 'enabled')
+                <div class="form-group col-md-6">
+                    <label>Ethereum</label>
+                    <input type="text" name="eth_address" value="{{ Auth::user()->eth_address }}"
+                        class="form-control" placeholder="Enter Ethereum Address">
+                    <small>Enter your Ethereum Address that will be used to withdraw your funds</small>
+                </div>
+            @endif
+
+            @if ($litecoin?->status == 'enabled')
+                <div class="form-group col-md-6">
+                    <label>Litecoin</label>
+                    <input type="text" name="ltc_address" value="{{ Auth::user()->ltc_address }}"
+                        class="form-control" placeholder="Enter Litecoin Address">
+                    <small>Enter your Litecoin Address that will be used to withdraw your funds</small>
+                </div>
+            @endif
+
+            @if ($usdt?->status == 'enabled')
+                <div class="form-group col-md-6">
+                    <label>USDT.TRC20</label>
+                    <input type="text" name="usdt_address" value="{{ Auth::user()->usdt_address }}"
+                        class="form-control" placeholder="Enter USDT.TRC20 Address">
+                    <small>Enter your USDT.TRC20 wallet Address</small>
+                </div>
+            @endif
+
+        </div>
+    </fieldset>
+
+    <button type="submit" class="px-5 btn btn-primary">Save</button>
+</form>
+
+
+
+<script>
+    document.getElementById('updatewithdrawalinfo').addEventListener('submit', function() {
+        // alert('love');
+        $.ajax({
+            url: "{{ route('updateacount') }}",
+            type: 'POST',
+            data: $('#updatewithdrawalinfo').serialize(),
+            success: function(response) {
+                if (response.status === 200) {
+                    $.notify({
+                        // options
+                        icon: 'flaticon-alarm-1',
+                        title: 'Success',
+                        message: response.success,
+                    }, {
+                        // settings
+                        type: 'success',
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        showProgressbar: true,
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 5000,
+                        timer: 1000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+
+                    });
+                } else {
+
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            },
+
+        });
+    });
+</script>
