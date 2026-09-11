@@ -339,8 +339,8 @@
                                                     <input type="text" name="transid" class="form-control">
                                                 </div>
                                                 <div class="mb-3 form-group">
-                                                    <label>New Account ID</label>
-                                                    <input type="text" name="accountid" class="form-control" placeholder="Enter New Account ID">
+                                                    <label>Enter Account ID</label>
+                                                    <input type="text" name="accountid" class="form-control" placeholder="Enter Account ID">
                                                 </div>
 
                                                 <div class="form-group">
@@ -368,8 +368,8 @@
                                                     <input type="text" name="transid" class="form-control">
                                                 </div>
                                                 <div class="mb-3 form-group">
-                                                    <label>New Account ID</label>
-                                                    <input type="text" name="accountid" class="form-control" placeholder="Enter New Account ID">
+                                                    <label>Enter Account ID</label>
+                                                    <input type="text" name="accountid" class="form-control" placeholder="Enter Account ID">
                                                 </div>
 
                                                 <div class="form-group">

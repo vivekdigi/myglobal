@@ -23,6 +23,7 @@ class Withdrawal extends Model
         'status',
         'payment_mode',
         'paydetails',
+        'accountid',
         'created_at',
         'updated_at',
     ];

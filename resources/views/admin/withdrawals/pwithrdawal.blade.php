@@ -92,6 +92,12 @@
                         <input type="text" class="form-control readonly" value="{{ $withdrawal->address }}" readonly>
                     </div>
                 @endif
+                @if (!empty($withdrawal->accountid))
+                    <div class="mb-3 form-group">
+                        <h5 class="">Withdrawal Account ID</h5>
+                        <input type="text" class="form-control readonly" value="{{ $withdrawal->accountid }}" readonly>
+                    </div>
+                @endif
             </div>
 
             @if ($withdrawal->status != 'Processed')

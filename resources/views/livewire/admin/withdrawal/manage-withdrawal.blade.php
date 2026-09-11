@@ -69,6 +69,7 @@
                                         <th>Client name</th>
                                         <th>Amount requested</th>
                                         <th>Amount + charges</th>
+                                        <th>Withdrawal ID</th>
                                         <th>Payment Method</th>
                                         <th>Account Id</th>
                                         <th>Email id</th>
@@ -88,6 +89,13 @@
                                             <td>{{ $settings->currency }}{{ number_format($item->amount) }}
                                             </td>
                                             <td>{{ $settings->currency }}{{ number_format($item->to_deduct) }}
+                                            </td>
+                                            <td>
+                                                @if (!empty($item->accountid))
+                                                    <strong>{{ $item->accountid }}</strong>
+                                                @else
+                                                    <span class="text-muted">N/A</span>
+                                                @endif
                                             </td>
                                             <td>{{ $item->payment_mode }}</td>
                                             <td>{{ $item->duser->accountid }}</td>

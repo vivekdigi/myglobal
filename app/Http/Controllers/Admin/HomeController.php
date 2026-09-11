@@ -384,16 +384,14 @@ class HomeController extends Controller
     }
     public function leadsassign()
     {
-        return view('admin.lead_asgn')
-            ->with(array(
-                'usersAssigned' => User::orderby('id', 'desc')->where([
-                    ['assign_to', Auth('admin')->User()->id],
-                    ['cstatus', NULL]
-                ])->get(),
+        $usersAssigned = User::orderby('id', 'desc')->where([
+            ['assign_to', Auth('admin')->User()->id],
+            ['cstatus', NULL]
+        ])->get();
 
-                'title' => 'Manage New Registered Clients',
+        $title = 'Manage New Registered Clients';
 
-            ));
+        return view('admin.lead_asgn', compact('usersAssigned', 'title'));
     }
 
 

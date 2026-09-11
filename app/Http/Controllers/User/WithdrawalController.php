@@ -185,7 +185,17 @@ class WithdrawalController extends Controller
         $dp->status = 'Pending';
         $dp->paydetails = $request->details;
         $dp->user = $user->id;
-        $dp->save();
+        $dp->accountid = $request->accountid;
+        try {
+            $dp->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if (\Str::contains($e->getMessage(), ['Unknown column', 'accountid'])) {
+                unset($dp->accountid);
+                $dp->save();
+            } else {
+                throw $e;
+            }
+        }
 
         // send mail to admin
         Mail::to($settings->contact_email)->send(new WithdrawalStatus($dp, $user, 'Withdrawal Request', true));
