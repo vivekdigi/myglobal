@@ -187,6 +187,7 @@ class DepositController extends Controller
         $request->validate([
             'proof'   => ['required', 'mimes:jpg,jpeg,png,pdf', 'max:3000'],
             'transid' => ['nullable', 'string', 'max:100'],
+            'accountid' => ['nullable', 'string', 'max:100'],
             'amount'  => ['required', 'numeric'],
             'paymethd_method' => ['required', 'string'],
         ]);
@@ -228,7 +229,17 @@ class DepositController extends Controller
         $dp->status        = 'Pending';
         $dp->proof         = $path;
         $dp->user          = \Auth::id();
-        $dp->save();
+        $dp->accountid     = $request->accountid;
+        try {
+            $dp->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if (\Str::contains($e->getMessage(), ['Unknown column', 'accountid'])) {
+                unset($dp->accountid);
+                $dp->save();
+            } else {
+                throw $e;
+            }
+        }
     
         $user = \Auth::user();
     

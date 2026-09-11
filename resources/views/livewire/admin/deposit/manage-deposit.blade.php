@@ -70,6 +70,7 @@
                                     <tr>
                                         <th>Client</th>
                                         <th>Amount Deposited</th>
+                                        <th>Deposit ID</th>
                                         <th>Payment Method</th>
                                         <th>Status</th>
                                         <th>Account Id</th>
@@ -92,6 +93,13 @@
                                     @endif
                                     </td>
                                     <td>{{ $settings->currency }}{{ number_format($deposit->amount) }}</td>
+                                    <td>
+                                    @if (!empty($deposit->accountid))
+                                    <strong>{{ $deposit->accountid }}</strong>
+                                    @else
+                                    <span class="text-muted">N/A</span>
+                                    @endif
+                                    </td>
                                     <td>{{ $deposit->payment_mode }}</td>
                                     <td>
                                     @if ($deposit->status == 'Processed')

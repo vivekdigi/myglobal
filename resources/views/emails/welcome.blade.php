@@ -10,6 +10,9 @@ Our expert support team is here to assist you at every step. Please don't hesita
 
 Kindly begin your trading journey using the details below:<br></br>
 
+@if(!empty($accountType))
+Account Type: <strong>{{ $accountType }}</strong><br>
+@endif
 Login: {{$user->accountid}} <br>
 Investor Password: <strong>{{ $account->investor_password ?? 'N/A' }}</strong><br>
 Master Password: <strong>{{ $account->master_password ?? 'N/A' }}</strong><br>

@@ -851,14 +851,24 @@ class SecondAccountRequestController extends Controller
         ];
 
         $recipients = array_unique(array_filter([
+            $parent->email,
             $subUser->email,
             'support@majestyfx.com',
             'support@majestiglobal.com',
         ]));
 
+        $accountType = null;
+        if ($subUser->is_secondary == 1) {
+            $accountType = '2nd Account';
+        } elseif ($subUser->is_secondary == 2) {
+            $accountType = '3rd Account';
+        } elseif ($subUser->is_secondary == 3) {
+            $accountType = '4th Account';
+        }
+
         foreach ($recipients as $recipient) {
             try {
-                Mail::to($recipient)->send(new WelcomeEmail($subUser, $accountData));
+                Mail::to($recipient)->send(new WelcomeEmail($subUser, $accountData, $accountType));
             } catch (\Exception $e) {
                 Log::error("Failed to send welcome email for account {$subUser->accountid} to {$recipient}: " . $e->getMessage());
             }

@@ -15,10 +15,22 @@ class WelcomeEmail extends Mailable
 
     public $user;
     public $account;
+    public $accountType;
 
-    public function __construct(User $user, $account = null)
+    public function __construct(User $user, $account = null, $accountType = null)
     {
         $this->user = $user;
+        $this->accountType = $accountType;
+
+        if (!$this->accountType) {
+            if ($user->is_secondary == 1) {
+                $this->accountType = '2nd Account';
+            } elseif ($user->is_secondary == 2) {
+                $this->accountType = '3rd Account';
+            } elseif ($user->is_secondary == 3) {
+                $this->accountType = '4th Account';
+            }
+        }
 
         if ($account && (is_object($account) || is_array($account))) {
             $this->account = is_array($account) ? (object) $account : $account;
@@ -43,13 +55,20 @@ class WelcomeEmail extends Mailable
     public function build()
     {
         $settings = Settings::first();
+        $siteName = $settings->site_name ?? config('app.name');
+
+        $subject = "Welcome to {$siteName}";
+        if ($this->accountType) {
+            $subject .= " - {$this->accountType}";
+        }
 
         return $this->markdown('emails.welcome')
-                    ->subject("Welcome to {$settings->site_name}")
+                    ->subject($subject)
                     ->with([
                         'user' => $this->user,
                         'account' => $this->account,
                         'settings' => $settings,
+                        'accountType' => $this->accountType,
                     ]);
     }
 }

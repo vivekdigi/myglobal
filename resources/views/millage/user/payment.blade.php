@@ -334,6 +334,14 @@
                                                 <input type="hidden" name="amount" value="{{ $amount }}">
                                                 <input type="hidden" name="paymethd_method"
                                                     value="{{ $payment_mode->name }}">
+                                                <div class="mb-3 form-group">
+                                                    <label>Add Transaction ID</label>
+                                                    <input type="text" name="transid" class="form-control">
+                                                </div>
+                                                <div class="mb-3 form-group">
+                                                    <label>New Account ID</label>
+                                                    <input type="text" name="accountid" class="form-control" placeholder="Enter New Account ID">
+                                                </div>
 
                                                 <div class="form-group">
                                                     <input type="submit" class="btn btn-primary"
@@ -355,6 +363,14 @@
                                                 <input type="hidden" name="amount" value="{{ $amount }}">
                                                 <input type="hidden" name="paymethd_method"
                                                     value="{{ $payment_mode->name }}">
+                                                <div class="mb-3 form-group">
+                                                    <label>Add Transaction ID</label>
+                                                    <input type="text" name="transid" class="form-control">
+                                                </div>
+                                                <div class="mb-3 form-group">
+                                                    <label>New Account ID</label>
+                                                    <input type="text" name="accountid" class="form-control" placeholder="Enter New Account ID">
+                                                </div>
 
                                                 <div class="form-group">
                                                     <input type="submit" class="btn btn-primary"

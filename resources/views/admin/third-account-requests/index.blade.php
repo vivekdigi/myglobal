@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="min-height: 280px;">
                         <table class="table table-hover table-sm mb-0">
                             <thead class="bg-light">
                                 <tr>

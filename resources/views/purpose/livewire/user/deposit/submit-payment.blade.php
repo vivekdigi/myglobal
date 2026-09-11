@@ -18,6 +18,14 @@
                     <div class="mb-3">
                         <input type="file" name="proof" class="form-control" required>
                     </div>
+                    <div class="mb-3">
+                        <label>Add Transaction ID</label>
+                        <input type="text" name="transid" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>New Account ID</label>
+                        <input type="text" name="accountid" class="form-control" placeholder="Enter New Account ID">
+                    </div>
                     <input type="hidden" name="amount" value="{{ $amount }}">
                     <input type="hidden" name="paymethd_method" value="{{ $payment_mode->name }}">
                 </div>
