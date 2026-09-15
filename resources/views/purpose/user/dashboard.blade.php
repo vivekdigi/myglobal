@@ -24,7 +24,7 @@
                         @if(!$secondary_account_exists)
                             <div class="col-md-6 col-sm-6 col-12" @if($demo_request) style="padding-left:8px;" @endif>
                                 <div class="p-3 rounded" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
-                                    <x-second-account-btn :secondRequest="$second_request" />
+                                    <x-second-account-btn :secondRequest="$second_request" :totaldeposited="$deposited" />
                                 </div>
                             </div>
                         @endif

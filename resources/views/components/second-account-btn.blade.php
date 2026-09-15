@@ -1,7 +1,8 @@
 {{-- Second Account Request Button Component --}}
 @php
-    $hasRequest = !is_null($secondRequest);
-    $status     = $hasRequest ? $secondRequest->status : null;
+    $hasRequest   = !is_null($secondRequest);
+    $status       = $hasRequest ? $secondRequest->status : null;
+    $totalDeposit = \App\Models\Deposit::where('user', Auth::id())->where('status', 'Processed')->sum('amount');
 @endphp
 
 <div class="second-account-section">
@@ -50,6 +51,20 @@
 function submitSecondAccountRequest() {
     var btn = document.getElementById('secondAccountBtn');
     if (!btn || btn.disabled) return;
+
+    // Check minimum deposit requirement
+    var totalDeposit = {{ (float) $totalDeposit }};
+    var minRequired = 1; // Minimum deposit required to request a second account
+
+    if (totalDeposit < minRequired) {
+        if (typeof swal === 'function') {
+            swal('Deposit Too Low', 'Your deposit is too low to request a second account. Please make a deposit first.', 'warning');
+        } else {
+            alert('Your deposit is too low to request a second account. Please make a deposit first.');
+        }
+        return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Submitting...';
     btn.style.background = '#757575';
@@ -65,7 +80,7 @@ function submitSecondAccountRequest() {
         var data = {};
         try { data = JSON.parse(xhr.responseText); } catch(e) {
             btn.disabled = false;
-            btn.style.background = '#0091ea';
+            btn.style.background = '#f5a623';
             btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> 2nd Account';
             alert('Server error (' + xhr.status + '). Please try again.');
             return;
@@ -79,17 +94,22 @@ function submitSecondAccountRequest() {
             btn.style.cursor = 'not-allowed';
             if (typeof swal === 'function') { swal('Success!', data.message, 'success'); }
         } else {
-            btn.style.background = '#ff9100';
+            btn.disabled = false;
+            btn.style.background = '#f5a623';
             btn.style.color = '#1a1a1a';
-            btn.style.border = '2px solid #ff9100';
-            btn.innerHTML = '<i class="fas fa-clock mr-1"></i> 2nd Acct Pending';
-            btn.disabled = true;
-            btn.style.cursor = 'not-allowed';
+            btn.style.border = '2px solid #f5a623';
+            btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> 2nd Account';
+            btn.style.cursor = 'pointer';
+            if (typeof swal === 'function') {
+                swal('Notice', data.message || 'Request could not be processed.', 'warning');
+            } else {
+                alert(data.message || 'Request could not be processed.');
+            }
         }
     };
     xhr.onerror = function () {
         btn.disabled = false;
-        btn.style.background = '#0091ea';
+        btn.style.background = '#f5a623';
         btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> 2nd Account';
         alert('Network error. Please try again.');
     };

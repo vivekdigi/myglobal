@@ -27,6 +27,18 @@ class SecondAccountController extends Controller
                 ], 409);
             }
 
+            // Check minimum deposit requirement
+            $totalDeposit = \App\Models\Deposit::where('user', $user->id)
+                ->where('status', 'Processed')
+                ->sum('amount');
+
+            if ($totalDeposit < 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your deposit is too low to request a second account. Please make a deposit first.',
+                ], 422);
+            }
+
             // Save to DB
             SecondAccountRequest::create([
                 'user_id'    => $user->id,
