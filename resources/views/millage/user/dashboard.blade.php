@@ -6,7 +6,7 @@
             <div>
                 <h5 class="mb-0 h3 font-weight-400">Welcome, {{ Auth::user()->name }}!</h5>
             </div>
-            <div class="py-2 ml-md-auto py-md-0">
+            <div class="py-2 ml-md-auto py-md-0 d-flex flex-wrap align-items-center justify-content-end" style="gap: 10px;">
                 @if(!$is_secondary)
                     <small class="text-muted mr-1" style="font-size:.72rem;">
                         <i class="fas fa-info-circle"></i> Additional services:

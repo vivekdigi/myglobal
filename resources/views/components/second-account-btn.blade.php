@@ -9,26 +9,26 @@
     <div class="text-center">
         @if ($hasRequest)
             @if ($status === 'approved')
-                <button disabled style="background:#000000;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:12px 28px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:block;">
+                <button disabled style="background:#000000;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:10px 14px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                     <i class="fas fa-check-circle mr-1"></i> 2nd Acct Approved ✓
                 </button>
-                <small class="d-block mt-2" style="font-size:.85rem;color:#fff;font-weight:500;margin-top:8px;">Your second account is ready to use</small>
+                <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Your second account is ready to use</small>
             @elseif ($status === 'rejected')
-                <button disabled style="background:#ff1744;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:12px 28px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:block;">
+                <button disabled style="background:#ff1744;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:10px 14px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                     <i class="fas fa-times-circle mr-1"></i> 2nd Acct Rejected
                 </button>
-                <small class="d-block mt-2 text-muted" style="font-size:.7rem;">Your request was not approved</small>
+                <small class="d-block text-muted" style="font-size:.7rem;line-height:1.3;">Your request was not approved</small>
             @else
-                <button disabled style="background:#ff9100;color:#1a1a1a;border:2px solid #ff9100;border-radius:50px;font-size:.78rem;font-weight:800;padding:12px 28px;cursor:not-allowed;letter-spacing:.4px;width:100%;display:block;">
+                <button disabled style="background:#ff9100;color:#1a1a1a;border:2px solid #ff9100;border-radius:50px;font-size:.78rem;font-weight:800;padding:10px 14px;cursor:not-allowed;letter-spacing:.4px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                     <i class="fas fa-clock mr-1"></i> 2nd Acct Pending
                 </button>
-                <small class="d-block mt-2" style="font-size:.85rem;color:#fff;font-weight:500;margin-top:8px;">Your request is under review</small>
+                <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Your request is under review</small>
             @endif
         @else
-            <button id="secondAccountBtn" onclick="submitSecondAccountRequest()" style="background:#f5a623;color:#1a1a1a;border:2px solid #f5a623;border-radius:50px;font-size:.78rem;font-weight:800;padding:12px 28px;cursor:pointer;letter-spacing:.4px;width:100%;display:block;">
+            <button id="secondAccountBtn" onclick="submitSecondAccountRequest()" style="background:#f5a623;color:#1a1a1a;border:2px solid #f5a623;border-radius:50px;font-size:.78rem;font-weight:800;padding:10px 14px;cursor:pointer;letter-spacing:.4px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                 <i class="fas fa-user-plus mr-1"></i> 2nd Account
             </button>
-            <small class="d-block mt-2" style="font-size:.85rem;color:#fff;font-weight:500;margin-top:8px;">Request a second account</small>
+            <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Request a second account</small>
         @endif
     </div>
 </div>

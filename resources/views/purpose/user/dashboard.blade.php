@@ -13,25 +13,25 @@
                     <small class="d-block text-white mb-3" style="font-size:.72rem; opacity:.75;">
                         <i class="fas fa-info-circle mr-1"></i> Request additional account services
                     </small>
-                    <div class="row justify-content-end" style="gap:8px; margin-bottom:20px;">
+                    <div class="row justify-content-end" style="gap: 14px 12px; margin-bottom: 35px;">
                         @if($demo_request)
-                            <div class="col-auto mb-2" style="min-width: 200px; max-width: 260px;">
-                                <div class="p-3 rounded h-100" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+                            <div class="col-auto mb-2" style="min-width: 210px; max-width: 245px; flex: 1 1 210px;">
+                                <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                     <x-demo-account-btn :demoRequest="$demo_request" />
                                 </div>
                             </div>
                         @endif
 
-                        <div class="col-auto mb-2" style="min-width: 200px; max-width: 260px;">
-                            <div class="p-3 rounded h-100" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+                        <div class="col-auto mb-2" style="min-width: 210px; max-width: 245px; flex: 1 1 210px;">
+                            <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                 <x-second-account-btn :secondRequest="$second_request" />
                             </div>
                         </div>
 
                         {{-- 3rd Account: Automatically displays when 2nd account is approved --}}
                         @if(($second_request && $second_request->status === 'approved') || !empty(Auth::user()->accountid_sec) || $secondary_account_exists)
-                            <div class="col-auto mb-2" style="min-width: 200px; max-width: 260px;">
-                                <div class="p-3 rounded h-100" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+                            <div class="col-auto mb-2" style="min-width: 210px; max-width: 245px; flex: 1 1 210px;">
+                                <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                     <x-third-account-btn :thirdRequest="$third_request" />
                                 </div>
                             </div>
@@ -39,8 +39,8 @@
 
                         {{-- 4th Account: Automatically displays when 3rd account is approved --}}
                         @if(($third_request && $third_request->status === 'approved') || !empty(Auth::user()->accountid_third) || $third_account_exists)
-                            <div class="col-auto mb-2" style="min-width: 200px; max-width: 260px;">
-                                <div class="p-3 rounded h-100" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+                            <div class="col-auto mb-2" style="min-width: 210px; max-width: 245px; flex: 1 1 210px;">
+                                <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                     <x-fourth-account-btn :fourthRequest="$fourth_request" />
                                 </div>
                             </div>
