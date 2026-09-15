@@ -360,9 +360,15 @@ class SecondAccountRequestController extends Controller
         // Update parent user's accountid_sec
         $parent->update(['accountid_sec' => $request->accountid]);
 
-        // Mark second account request as approved if exists
-        SecondAccountRequest::where('user_id', $parent->id)
-            ->update(['status' => 'approved']);
+        // Mark second account request as approved (or create it if it didn't exist)
+        SecondAccountRequest::updateOrCreate(
+            ['user_id' => $parent->id],
+            [
+                'user_name'  => $parent->name,
+                'user_email' => $parent->email,
+                'status'     => 'approved',
+            ]
+        );
 
         // Send welcome email with credentials to user and support
         $this->sendAccountWelcomeEmail($secondary, $parent, $request);
@@ -747,7 +753,14 @@ class SecondAccountRequestController extends Controller
         $parent->update(['accountid_third' => $request->accountid]);
 
         if (Schema::hasTable('third_account_requests')) {
-            ThirdAccountRequest::where('user_id', $parent->id)->update(['status' => 'approved']);
+            ThirdAccountRequest::updateOrCreate(
+                ['user_id' => $parent->id],
+                [
+                    'user_name'  => $parent->name,
+                    'user_email' => $parent->email,
+                    'status'     => 'approved',
+                ]
+            );
         }
 
         $this->sendAccountWelcomeEmail($third, $parent, $request);
@@ -820,7 +833,14 @@ class SecondAccountRequestController extends Controller
         $parent->update(['accountid_fourth' => $request->accountid]);
 
         if (Schema::hasTable('fourth_account_requests')) {
-            FourthAccountRequest::where('user_id', $parent->id)->update(['status' => 'approved']);
+            FourthAccountRequest::updateOrCreate(
+                ['user_id' => $parent->id],
+                [
+                    'user_name'  => $parent->name,
+                    'user_email' => $parent->email,
+                    'status'     => 'approved',
+                ]
+            );
         }
 
         $this->sendAccountWelcomeEmail($fourth, $parent, $request);

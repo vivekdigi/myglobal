@@ -92,6 +92,15 @@ class SecondAccountController extends Controller
                 ], 409);
             }
 
+            // Check if second account is approved
+            $secondRequest = SecondAccountRequest::where('user_id', $user->id)->first();
+            if (!$secondRequest || $secondRequest->status !== 'approved') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your second account must be approved before you can request a third account.',
+                ], 403);
+            }
+
             // Check minimum deposit requirement
             $totalDeposit = \App\Models\Deposit::where('user', $user->id)
                 ->where('status', 'Processed')
@@ -153,6 +162,15 @@ class SecondAccountController extends Controller
                     'success' => false,
                     'message' => 'You have already submitted a fourth account request.',
                 ], 409);
+            }
+
+            // Check if third account is approved
+            $thirdRequest = ThirdAccountRequest::where('user_id', $user->id)->first();
+            if (!$thirdRequest || $thirdRequest->status !== 'approved') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your third account must be approved before you can request a fourth account.',
+                ], 403);
             }
 
             // Check minimum deposit requirement

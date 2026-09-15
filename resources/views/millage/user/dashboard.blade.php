@@ -16,11 +16,11 @@
                     @endif
                     <x-second-account-btn :secondRequest="$second_request" />
 
-                    @if(($second_request && $second_request->status === 'approved') || !empty(Auth::user()->accountid_sec) || $secondary_account_exists)
+                    @if($second_request && $second_request->status === 'approved')
                         <x-third-account-btn :thirdRequest="$third_request" />
                     @endif
 
-                    @if(($third_request && $third_request->status === 'approved') || !empty(Auth::user()->accountid_third) || $third_account_exists)
+                    @if($third_request && $third_request->status === 'approved')
                         <x-fourth-account-btn :fourthRequest="$fourth_request" />
                     @endif
                 @endif

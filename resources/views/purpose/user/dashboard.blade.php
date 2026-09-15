@@ -28,8 +28,8 @@
                             </div>
                         </div>
 
-                        {{-- 3rd Account: Automatically displays when 2nd account is approved --}}
-                        @if(($second_request && $second_request->status === 'approved') || !empty(Auth::user()->accountid_sec) || $secondary_account_exists)
+                        {{-- 3rd Account: Automatically displays only when 2nd account is approved --}}
+                        @if($second_request && $second_request->status === 'approved')
                             <div class="col-auto mb-2" style="min-width: 210px; max-width: 245px; flex: 1 1 210px;">
                                 <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                     <x-third-account-btn :thirdRequest="$third_request" />
@@ -37,8 +37,8 @@
                             </div>
                         @endif
 
-                        {{-- 4th Account: Automatically displays when 3rd account is approved --}}
-                        @if(($third_request && $third_request->status === 'approved') || !empty(Auth::user()->accountid_third) || $third_account_exists)
+                        {{-- 4th Account: Automatically displays only when 3rd account is approved --}}
+                        @if($third_request && $third_request->status === 'approved')
                             <div class="col-auto mb-2" style="min-width: 210px; max-width: 245px; flex: 1 1 210px;">
                                 <div class="p-3 rounded h-100 d-flex flex-column justify-content-center" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                     <x-fourth-account-btn :fourthRequest="$fourth_request" />
