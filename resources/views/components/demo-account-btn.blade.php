@@ -8,7 +8,7 @@
     <div class="text-center">
         @if ($hasRequest)
             @if ($status === 'approved')
-                <button disabled style="background:#000000;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:10px 14px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
+                <button disabled style="background:#31ce36;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:10px 14px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                     <i class="fas fa-check-circle mr-1"></i> Demo Approved ✓
                 </button>
                 <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Your demo account is ready to use</small>

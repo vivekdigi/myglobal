@@ -9,7 +9,7 @@
     <div class="text-center">
         @if ($hasRequest)
             @if ($status === 'approved')
-                <button disabled style="background:#000000;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:10px 14px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
+                <button disabled style="background:#31ce36;color:#fff;border:none;border-radius:50px;font-size:.78rem;font-weight:700;padding:10px 14px;cursor:not-allowed;letter-spacing:.3px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                     <i class="fas fa-check-circle mr-1"></i> 4th Acct Approved ✓
                 </button>
                 <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Your fourth account is ready to use</small>
@@ -25,7 +25,7 @@
                 <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Your request is under review</small>
             @endif
         @else
-            <button id="fourthAccountBtn" onclick="submitFourthAccountRequest()" style="background:#6f42c1;color:#fff;border:2px solid #6f42c1;border-radius:50px;font-size:.78rem;font-weight:800;padding:10px 14px;cursor:pointer;letter-spacing:.4px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
+            <button id="fourthAccountBtn" onclick="submitFourthAccountRequest()" style="background:#48abf7;color:#fff;border:2px solid #48abf7;border-radius:50px;font-size:.78rem;font-weight:800;padding:10px 14px;cursor:pointer;letter-spacing:.4px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;margin-bottom:8px;">
                 <i class="fas fa-user-plus mr-1"></i> 4th Account
             </button>
             <small class="d-block" style="font-size:.76rem;color:rgba(255,255,255,0.85);font-weight:500;line-height:1.3;">Request a fourth account</small>
@@ -79,7 +79,9 @@ function submitFourthAccountRequest() {
         var data = {};
         try { data = JSON.parse(xhr.responseText); } catch(e) {
             btn.disabled = false;
-            btn.style.background = '#6f42c1';
+            btn.style.background = '#48abf7';
+            btn.style.color = '#fff';
+            btn.style.border = '2px solid #48abf7';
             btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> 4th Account';
             alert('Server error (' + xhr.status + '). Please try again.');
             return;
@@ -94,9 +96,9 @@ function submitFourthAccountRequest() {
             if (typeof swal === 'function') { swal('Success!', data.message, 'success'); }
         } else {
             btn.disabled = false;
-            btn.style.background = '#6f42c1';
+            btn.style.background = '#48abf7';
             btn.style.color = '#fff';
-            btn.style.border = '2px solid #6f42c1';
+            btn.style.border = '2px solid #48abf7';
             btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> 4th Account';
             btn.style.cursor = 'pointer';
             if (typeof swal === 'function') {
@@ -108,7 +110,9 @@ function submitFourthAccountRequest() {
     };
     xhr.onerror = function () {
         btn.disabled = false;
-        btn.style.background = '#6f42c1';
+        btn.style.background = '#48abf7';
+        btn.style.color = '#fff';
+        btn.style.border = '2px solid #48abf7';
         btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> 4th Account';
         alert('Network error. Please try again.');
     };
