@@ -23,8 +23,8 @@
                         <input type="text" name="transid" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label>Enter Account ID</label>
-                        <input type="text" name="accountid" class="form-control" placeholder="Enter Account ID">
+                        <label>Enter MT5 Account ID</label>
+                        <input type="number" name="accountid" class="form-control" placeholder="Enter MT5 Account ID" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     </div>
                     <input type="hidden" name="amount" value="{{ $amount }}">
                     <input type="hidden" name="paymethd_method" value="{{ $payment_mode->name }}">

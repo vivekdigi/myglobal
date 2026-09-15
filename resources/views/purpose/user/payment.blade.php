@@ -352,8 +352,8 @@
                                                     <input type="text" name="transid" class="form-control transid">
                                                 </div>
                                                 <div class="mb-3 form-group">
-                                                    <label>Enter Account ID</label>
-                                                    <input type="text" name="accountid" class="form-control transid" placeholder="Enter Account ID">
+                                                    <label>Enter MT5 Account ID</label>
+                                                    <input type="number" name="accountid" class="form-control transid" placeholder="Enter MT5 Account ID" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                                 </div>
 
                                                 <div class="form-group">
@@ -381,8 +381,8 @@
                                                     <input type="text" name="transid" class="form-control transid" >
                                                 </div>
                                                 <div class="mb-3 form-group">
-                                                    <label>Enter Account ID</label>
-                                                    <input type="text" name="accountid" class="form-control transid" placeholder="Enter Account ID">
+                                                    <label>Enter MT5 Account ID</label>
+                                                    <input type="number" name="accountid" class="form-control transid" placeholder="Enter MT5 Account ID" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                                 </div>
                                                 <div class="form-group">
                                                     <input type="submit" class="btn btn-primary"

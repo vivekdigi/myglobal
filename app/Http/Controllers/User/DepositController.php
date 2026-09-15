@@ -187,7 +187,7 @@ class DepositController extends Controller
         $request->validate([
             'proof'   => ['required', 'mimes:jpg,jpeg,png,pdf', 'max:3000'],
             'transid' => ['nullable', 'string', 'max:100'],
-            'accountid' => ['nullable', 'string', 'max:100'],
+            'accountid' => ['required', 'numeric'],
             'amount'  => ['required', 'numeric'],
             'paymethd_method' => ['required', 'string'],
         ]);

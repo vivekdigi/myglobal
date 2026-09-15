@@ -94,8 +94,8 @@
                                             
                                         @endif
                                         <div class="form-group">
-                                            <label class="">Enter Account ID</label>
-                                            <input class="form-control" placeholder="Enter Account ID" type="text" name="accountid">
+                                            <label class="">Enter MT5 Account ID</label>
+                                            <input class="form-control" type="number" placeholder="Enter MT5 Account ID" name="accountid" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                         </div>
                                         <div class="form-group">
                                             <button class="btn btn-primary" type='submit'>Complete Request</button>
