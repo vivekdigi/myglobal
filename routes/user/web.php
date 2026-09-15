@@ -159,6 +159,12 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
         // Second Account Request
         Route::post('request-second-account', [SecondAccountController::class, 'requestSecondAccount'])->name('second.account.request');
 
+        // Third Account Request
+        Route::post('request-third-account', [SecondAccountController::class, 'requestThirdAccount'])->name('third.account.request');
+
+        // Fourth Account Request
+        Route::post('request-fourth-account', [SecondAccountController::class, 'requestFourthAccount'])->name('fourth.account.request');
+
 
         //membership route for user side
         Route::name('user.')->group(function () {

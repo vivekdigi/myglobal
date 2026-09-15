@@ -90,9 +90,13 @@ class ViewsController extends Controller
             'referrals' => User::where('ref_by', Auth::user()->id)->count(),
             'demo_request'   => \App\Models\DemoAccountRequest::where('user_id', Auth::user()->id)->first(),
             'second_request' => \App\Models\SecondAccountRequest::where('user_id', Auth::user()->id)->first(),
+            'third_request'  => \App\Models\ThirdAccountRequest::where('user_id', Auth::user()->id)->first(),
+            'fourth_request' => \App\Models\FourthAccountRequest::where('user_id', Auth::user()->id)->first(),
             // Secondary account logic
             'is_secondary'            => (bool) $user->is_secondary,
             'secondary_account_exists'=> User::where('parent_user_id', $user->id)->where('is_secondary', 1)->exists(),
+            'third_account_exists'    => User::where('parent_user_id', $user->id)->where('is_secondary', 2)->exists(),
+            'fourth_account_exists'   => User::where('parent_user_id', $user->id)->where('is_secondary', 3)->exists(),
         ]);
     }
 

@@ -14,8 +14,14 @@
                     @if($demo_request)
                         <x-demo-account-btn :demoRequest="$demo_request" />
                     @endif
-                    @if(!$secondary_account_exists)
-                        <x-second-account-btn :secondRequest="$second_request" />
+                    <x-second-account-btn :secondRequest="$second_request" />
+
+                    @if(($second_request && $second_request->status === 'approved') || !empty(Auth::user()->accountid_sec) || $secondary_account_exists)
+                        <x-third-account-btn :thirdRequest="$third_request" />
+                    @endif
+
+                    @if(($third_request && $third_request->status === 'approved') || !empty(Auth::user()->accountid_third) || $third_account_exists)
+                        <x-fourth-account-btn :fourthRequest="$fourth_request" />
                     @endif
                 @endif
                 <a href="{{ route('deposits') }}" class="mr-2 btn btn-success d-lg-inline">Deposit</a>
