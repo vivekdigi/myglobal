@@ -24,10 +24,13 @@
                 <small class="d-block mt-2" style="font-size:.85rem;color:#fff;font-weight:500;margin-top:8px;">Your request is under review</small>
             @endif
         @else
+            {{-- Demo account request button is hidden --}}
+            {{--
             <button id="demoRequestBtn" onclick="submitDemoRequest()" style="background:#f5a623;color:#1a1a1a;border:2px solid #f5a623;border-radius:50px;font-size:.78rem;font-weight:800;padding:12px 28px;cursor:pointer;letter-spacing:.4px;text-shadow:none;width:100%;display:block;">
                 <i class="fas fa-flask mr-1"></i> Demo Account
             </button>
             <small class="d-block mt-2" style="font-size:.85rem;color:#fff;font-weight:500;margin-top:8px;">Request a demo account</small>
+            --}}
         @endif
     </div>
 </div>

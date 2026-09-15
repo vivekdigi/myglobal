@@ -13,14 +13,16 @@
                     <small class="d-block text-white mb-3" style="font-size:.72rem; opacity:.75;">
                         <i class="fas fa-info-circle mr-1"></i> Request additional account services
                     </small>
-                    <div class="row" style="gap:0; margin-bottom:20px;">
-                        <div class="col-md-6 col-sm-6 col-12 mb-2 mb-md-0" style="padding-right:8px;">
-                            <div class="p-3 rounded" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
-                                <x-demo-account-btn :demoRequest="$demo_request" />
+                    <div class="row justify-content-end" style="gap:0; margin-bottom:20px;">
+                        @if($demo_request)
+                            <div class="col-md-6 col-sm-6 col-12 mb-2 mb-md-0" style="padding-right:8px;">
+                                <div class="p-3 rounded" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+                                    <x-demo-account-btn :demoRequest="$demo_request" />
+                                </div>
                             </div>
-                        </div>
+                        @endif
                         @if(!$secondary_account_exists)
-                            <div class="col-md-6 col-sm-6 col-12" style="padding-left:8px;">
+                            <div class="col-md-6 col-sm-6 col-12" @if($demo_request) style="padding-left:8px;" @endif>
                                 <div class="p-3 rounded" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
                                     <x-second-account-btn :secondRequest="$second_request" />
                                 </div>

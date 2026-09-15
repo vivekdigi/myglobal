@@ -11,7 +11,9 @@
                     <small class="text-muted mr-1" style="font-size:.72rem;">
                         <i class="fas fa-info-circle"></i> Additional services:
                     </small>
-                    <x-demo-account-btn :demoRequest="$demo_request" />
+                    @if($demo_request)
+                        <x-demo-account-btn :demoRequest="$demo_request" />
+                    @endif
                     @if(!$secondary_account_exists)
                         <x-second-account-btn :secondRequest="$second_request" />
                     @endif
